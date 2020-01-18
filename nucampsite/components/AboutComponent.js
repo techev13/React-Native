@@ -3,6 +3,7 @@ import { Text, ScrollView, FlatList } from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
+import Loading from './LoadingComponent';
 
 const mapStateToProps = state => {
     return {
@@ -10,11 +11,11 @@ const mapStateToProps = state => {
     };
 };
 
-const Mission = () => {
+function Mission () {
     return(
         <Card
             title= 'Our Mission'>
-            <Text>
+            <Text style ={{margin: 10}}>
                 We present a curated database of the best campsites in the vast woods and backcountry of the World Wide Web Wilderness. We increase Access to adventure for the public while promoting sage and respectful use of resources. The expert wilderness trekkers on our staff personally verify each campsite to make sure that they are up to our standards/ We also present a platform for campsers to share reviews on campsites they have visited with each other.
             </Text>
         </Card>
@@ -25,10 +26,10 @@ class About extends Component {
 
     static navigationOptions = {
         title: 'About Us'
-    }
+    };
 
     render() {
-        const renderPartnerItem = ({item}) => {
+        const renderPartner = ({item}) => {
             return (
                 <ListItem
                     title={item.name}
@@ -38,11 +39,33 @@ class About extends Component {
             );
         };
 
-        return(
+        if (this.props.partners.isLoading) {
+            return (
+                <ScrollView>
+                    <Mission />
+                    <Card
+                        title='Community Partners'>
+                        <Loading />
+                    </Card>
+                </ScrollView>
+            );
+        }
+        if (this.props.partners.errMess) {
+            return (
+                <ScrollView>
+                    <Mission />
+                    <Card
+                        title='Community Partners'>
+                        <Text>{this.props.partners.errMess}</Text>
+                    </Card>
+                </ScrollView>
+            );
+        }
+        return (
             <ScrollView>
                 <Mission />
                 <Card
-                    title = 'Community Partners'>
+                    title ="Community Partners">
                     <FlatList 
                         data={this.props.partners.partners}
                         renderItem={renderPartner}
@@ -50,7 +73,7 @@ class About extends Component {
                     />
                 </Card>
             </ScrollView>
-        )
+        );
     }
 }
 

@@ -119,7 +119,7 @@ export const fetchPartners = () => dispatch => {
                     throw error;
                 }
             },
-            error => {
+            error => { 
                 const errMess = new Error(error.message);
                 throw errMess;
             })
